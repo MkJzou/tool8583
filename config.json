@@ -1,0 +1,27 @@
+[
+    {
+        "all": [
+            { "no": 11, "name": "受卡方系统跟踪号", "attribute": "n6", "format": "", "type":"BCD" },
+            { "no": 12, "name": "受卡方所在地时间", "attribute": "n6", "format": "", "type":"BCD" },
+            { "no": 13, "name": "受卡方所在地日期", "attribute": "n4", "format": "", "type":"BCD" },
+            { "no": 32, "name": "受理方标识码", "attribute": "", "format": "LLVAR", "type":"BCD" },
+            { "no": 37, "name": "检索参考号", "attribute": "an12", "format": "", "type":"ASCII" },
+            { "no": 39, "name": "应答码", "attribute": "an2", "format": "", "type":"ASCII" },
+            { "no": 41, "name": "受卡机终端标识码", "attribute": "ans8", "format": "", "type":"ASCII" },
+            { "no": 42, "name": "受卡方标识码", "attribute": "ans15", "format": "", "type":"ASCII" },
+            { "no": 60, "name": "自定义域", "attribute": "", "format": "LLLVAR", "type":"BCD",
+                "sub": [
+                    { "no": 60.1, "name": "交易类型码", "attribute": "n2", "format": "", "type":"BCD"},
+                    { "no": 60.2, "name": "批次号", "attribute": "n6", "format": "", "type":"BCD"},
+                    { "no": 60.3, "name": "网络管理信息码", "attribute": "n3", "format": "", "type":"BCD"}
+                ]
+            },
+            { "no": 62, "name": "终端信息/终端密钥", "attribute": "", "format": "LLLVAR", "type":"BINARY" },
+            { "no": 63, "name": "自定义域", "attribute": "", "format": "LLLVAR", "type":"ASCII",
+                "sub": [
+                    { "no": 63.1, "name": "操作员代码", "attribute": "an3", "format": "", "type":"ASCII"}
+                ]
+            }
+        ]
+    }
+]
