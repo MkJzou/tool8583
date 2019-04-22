@@ -1,5 +1,7 @@
 #include "widget.h"
 
+#include <algorithm>
+
 #include <QToolBar>
 #include <QTextEdit>
 #include <QPushButton>
@@ -16,7 +18,9 @@
 
 using mk::func::Hex2Bcd;
 using mk::func::Bcd2Hex;
+using mk::func::Bcd2Int;
 using std::vector;
+using std::copy;
 
 
 Widget::Widget(QWidget *parent)
@@ -58,6 +62,8 @@ void Widget::uiInit()
     // other
     pInputTextEdit_ = pInputTextEdit;
     pOutputTextEdit_ = pOutputTextEdit;
+
+    pOutputTextEdit_->append("<p><font color=\"#eeff00\">123</font></p>");
 }
 
 void Widget::decode()
@@ -86,21 +92,101 @@ void Widget::decode(std::vector<uchar> &data)
 
     vector<uchar> bitmap = getBitmap(data);
 
+    QString log("位图: ");
+    for (auto &nm : bitmap)
+    {
+        log += QString("%1 ").arg(nm);
+    }
+    pOutputTextEdit_->append(log);
+
+    auto fields = config::config.getMessages().begin()->second;
+
+    for (auto &nm : bitmap)
+    {
+        if (fields.find(nm) != fields.end())
+        {
+//                double no;
+//                QString name;
+//                QString attribute;
+//                QString format;
+//                QString type;
+//                std::map<double, Field> sub;
+            auto field = fields[nm];
+            log = QString("%1 ").arg(field.no) + field.name + ': ';
+
+            qDebug() << field.no << ' '
+                     << field.name << ' '
+                     << field.attribute << ' '
+                     << field.format << ' '
+                     << field.type << ' ';
+
+            int varLen;
+            if (field.format == "LLVAR")
+            {
+                sysprintf("%d", data.size());
+                sysprintf("%02", data[0]);
+
+                varLen = Bcd2Int(&data[0], 1);
+                data.erase(data.begin(), data.begin() + 1);
+            }
+            else if (field.format == "LLLVAR")
+            {
+                sysprintf("%d", data.size());
+                sysprintf("%02X %02X", data[0], data[1]);
+
+                varLen = Bcd2Int(&data[0], 2);
+                data.erase(data.begin(), data.begin() + 2);
+            }
+            else
+            {
+                int index = field.attribute.indexOf(QRegExp("(\\d+$)"));
+                varLen = field.attribute.right(
+                            field.attribute.length() - index).toInt();
+            }
+
+            qDebug() << "varLen = " << varLen;
+
+            vector<uchar> varData;
+
+            if (field.type == "ASCII")
+            {
+                std::copy(data.begin(), data.begin() + varLen, std::back_inserter(varData));
+                varData.push_back(0);
+                log += (char*)&varData[0];
+                data.erase(data.begin(), data.begin() + varLen);
+            }
+            else
+            {
+                varLen = (varLen + 1) * 2 / 2;
+                std::copy(data.begin(), data.begin() + varLen / 2, std::back_inserter(varData));
+                log += Bcd2Hex(&varData[0], varData.size()).c_str();
+                data.erase(data.begin(), data.begin() + varLen / 2);
+            }
+
+            pOutputTextEdit_->append(log);
+        }
+    }
 }
 
 vector<uchar> Widget::getBitmap(std::vector<uchar> &data)
 {
+    vector<uchar> bitmap;
+
     int loop = data[0] & 0x80 ? 16 : 8;
 
     for (int i = 0; i < loop; ++i)
     {
-        for (int bit = 7; i >= 0; --bit)
+        for (int bit = 7; bit >= 0; --bit)
         {
-
+            if ((data[i] >> bit) & 0x01)
+            {
+                bitmap.push_back(i * 8 + (8 - bit));
+            }
         }
     }
 
-    return vector<uchar>();
+    data.erase(data.begin(), data.begin() + loop);
+    return bitmap;
 }
 
 void Widget::configField()
