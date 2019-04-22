@@ -9,8 +9,14 @@
 
 #include "fieldconfig.h"
 #include "func/function.h"
+#include "func/Exception.h"
+
 
 #define sysprintf mk::func::sysprintA
+
+using mk::func::Hex2Bcd;
+using mk::func::Bcd2Hex;
+using std::vector;
 
 
 Widget::Widget(QWidget *parent)
@@ -59,15 +65,42 @@ void Widget::decode()
     qDebug() << "decode";
 
     QString sInputText = pInputTextEdit_->toPlainText().remove(QRegExp("\\s"));
-//    qDebug() << sInputText;
 
     sysprintf(sInputText.toStdString().c_str());
 
-    std::vector<uchar> vData = mk::func::Hex2Bcd(sInputText.toStdString().c_str());
+    pOutputTextEdit_->clear();
+    decode(Hex2Bcd(
+               sInputText.toStdString().c_str()));
+}
 
-    sysprintf("size = %d", vData.size());
+void Widget::decode(std::vector<uchar> &data)
+{
+    if (data.size() < 10)
+    {
+        throw mk::ErrorException("length error");
+    }
 
-    mk::func::HexPrintA(&vData[0], vData.size());
+    pOutputTextEdit_->append(QString("消息类型: ") + Bcd2Hex(&data[0], 2).c_str());
+
+    data.erase(data.begin(), data.begin() + 2);
+
+    vector<uchar> bitmap = getBitmap(data);
+
+}
+
+vector<uchar> Widget::getBitmap(std::vector<uchar> &data)
+{
+    int loop = data[0] & 0x80 ? 16 : 8;
+
+    for (int i = 0; i < loop; ++i)
+    {
+        for (int bit = 7; i >= 0; --bit)
+        {
+
+        }
+    }
+
+    return vector<uchar>();
 }
 
 void Widget::configField()

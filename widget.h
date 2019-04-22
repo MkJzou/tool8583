@@ -22,6 +22,9 @@ private slots:
 private:
     void uiInit();
 
+    void decode(std::vector<uchar> &data);
+    std::vector<uchar> getBitmap(std::vector<uchar> &data);
+
 private:
     QTextEdit *pInputTextEdit_;
     QTextEdit *pOutputTextEdit_;
