@@ -23,6 +23,7 @@ private:
     void uiInit();
 
     void decode(std::vector<uchar> &data);
+    void decodeField(QString sFieldNo, std::vector<uchar> &data);
     std::vector<uchar> getBitmap(std::vector<uchar> &data);
 
 private:

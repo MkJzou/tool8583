@@ -90,17 +90,17 @@ void Config::read()
 
 bool Config::getFieldAttribute(Field &field, QJsonObject& fieldJs)
 {
-    if (!(fieldJs.contains("no") && fieldJs.value("no").isDouble()
-            || fieldJs.contains("name") && fieldJs.value("name").isString()
-            || fieldJs.contains("attribute") && fieldJs.value("attribute").isString()
-            || fieldJs.contains("format") && fieldJs.value("format").isString()
-            || fieldJs.contains("type") && fieldJs.value("type").isString()
+    if (!(fieldJs.contains("no") && fieldJs.value("no").isString()
+            && fieldJs.contains("name") && fieldJs.value("name").isString()
+            && fieldJs.contains("attribute") && fieldJs.value("attribute").isString()
+            && fieldJs.contains("format") && fieldJs.value("format").isString()
+            && fieldJs.contains("type") && fieldJs.value("type").isString()
        ))
     {
         return false;
     }
 
-    field.no = fieldJs.value("no").toDouble();
+    field.no = fieldJs.value("no").toString();
     field.name = fieldJs.value("name").toString();
     field.attribute = fieldJs.value("attribute").toString();
     field.format = fieldJs.value("format").toString();
@@ -125,8 +125,7 @@ bool Config::getFieldAttribute(Field &field, QJsonObject& fieldJs)
 
                 if (getFieldAttribute(subfield, subfieldJs))
                 {
-                    field.sub.insert(
-                                std::pair<double, Field>(subfield.no, subfield));
+                    field.sub.insert(FIELD(subfield.no, subfield));
                 }
             }
         }

@@ -16,16 +16,16 @@ namespace config{
 
 struct Field
 {
-    double no;
+    QString no;
     QString name;
     QString attribute;
     QString format;
     QString type;
-    std::map<double, Field> sub;
+    std::map<QString, Field> sub;
 };
 
-using FIELD = std::pair<double, Field>;
-using FIELDS = std::map<double, Field>;
+using FIELD = std::pair<QString, Field>;
+using FIELDS = std::map<QString, Field>;
 using MESSAGE = std::pair<QString, FIELDS>;
 using MESSAGES = std::map<QString, FIELDS>;
 

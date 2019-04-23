@@ -137,7 +137,7 @@ void FieldConfig::uiInit()
 void FieldConfig::setTreeItems(const config::Field &field, QStandardItem *parentItem)
 {
     QList<QStandardItem*> items;
-    QStandardItem* itemNo = new QStandardItem(QStringLiteral("%1").arg(field.no));
+    QStandardItem* itemNo = new QStandardItem(field.no);
     QStandardItem* itemName = new QStandardItem(field.name);
     QStandardItem* itemAttribute = new QStandardItem(field.attribute);
     QStandardItem* itemFormat = new QStandardItem(field.format);
@@ -262,17 +262,17 @@ FIELDS FieldConfig::getConfigFields(QStandardItem *pRootItem)
         QStandardItem *pNode4 = pRootItem->child(i, 3);
         QStandardItem *pNode5 = pRootItem->child(i, 4);
 
-        qDebug() << pNode1->text().toDouble() << ' '
+        qDebug() << pNode1->text() << ' '
                  << pNode2->text() << ' '
                  << pNode3->text() << ' '
                  << pNode4->text() << ' '
                  << pNode5->text();
 
-        Field field = { pNode1->text().toDouble(), pNode2->text(), pNode3->text(), pNode4->text(), pNode5->text() };
+        Field field = { pNode1->text(), pNode2->text(), pNode3->text(), pNode4->text(), pNode5->text() };
 
         field.sub = getConfigFields(pNode1);
 
-        fields.insert(FIELD(pNode1->text().toDouble(), field));
+        fields.insert(FIELD(pNode1->text(), field));
     }
 
     return fields;

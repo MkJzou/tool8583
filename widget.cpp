@@ -103,69 +103,90 @@ void Widget::decode(std::vector<uchar> &data)
 
     for (auto &nm : bitmap)
     {
-        if (fields.find(nm) != fields.end())
+        QString no = QString("%1").arg(nm, 2, 10, QChar('0'));
+        if (fields.find(no) == fields.end())
         {
-//                double no;
-//                QString name;
-//                QString attribute;
-//                QString format;
-//                QString type;
-//                std::map<double, Field> sub;
-            auto field = fields[nm];
-            log = QString("%1 ").arg(field.no) + field.name + ': ';
-
-            qDebug() << field.no << ' '
-                     << field.name << ' '
-                     << field.attribute << ' '
-                     << field.format << ' '
-                     << field.type << ' ';
-
-            int varLen;
-            if (field.format == "LLVAR")
-            {
-                sysprintf("%d", data.size());
-                sysprintf("%02", data[0]);
-
-                varLen = Bcd2Int(&data[0], 1);
-                data.erase(data.begin(), data.begin() + 1);
-            }
-            else if (field.format == "LLLVAR")
-            {
-                sysprintf("%d", data.size());
-                sysprintf("%02X %02X", data[0], data[1]);
-
-                varLen = Bcd2Int(&data[0], 2);
-                data.erase(data.begin(), data.begin() + 2);
-            }
-            else
-            {
-                int index = field.attribute.indexOf(QRegExp("(\\d+$)"));
-                varLen = field.attribute.right(
-                            field.attribute.length() - index).toInt();
-            }
-
-            qDebug() << "varLen = " << varLen;
-
-            vector<uchar> varData;
-
-            if (field.type == "ASCII")
-            {
-                std::copy(data.begin(), data.begin() + varLen, std::back_inserter(varData));
-                varData.push_back(0);
-                log += (char*)&varData[0];
-                data.erase(data.begin(), data.begin() + varLen);
-            }
-            else
-            {
-                varLen = (varLen + 1) * 2 / 2;
-                std::copy(data.begin(), data.begin() + varLen / 2, std::back_inserter(varData));
-                log += Bcd2Hex(&varData[0], varData.size()).c_str();
-                data.erase(data.begin(), data.begin() + varLen / 2);
-            }
-
-            pOutputTextEdit_->append(log);
+            pOutputTextEdit_->append(QString("field %1 no parsing rules").arg(nm));
+            break;
         }
+
+            //    std::map<double, Field> sub;
+        auto field = fields[no];
+        log = field.no + ' ' + field.name + ": ";
+
+
+        qDebug() << field.no << ' '
+                    << field.name << ' '
+                    << field.attribute << ' '
+                    << field.format << ' '
+                    << field.type << ' ';
+
+        int varLen;
+        if (field.format == "LLVAR")
+        {
+            sysprintf("%d", data.size());
+            sysprintf("%02X", data[0]);
+
+            varLen = Bcd2Int(&data[0], 1);
+            data.erase(data.begin(), data.begin() + 1);
+        }
+        else if (field.format == "LLLVAR")
+        {
+            sysprintf("%d", data.size());
+            sysprintf("%02X %02X", data[0], data[1]);
+
+            varLen = Bcd2Int(&data[0], 2);
+            data.erase(data.begin(), data.begin() + 2);
+        }
+        else
+        {
+            int index = field.attribute.indexOf(QRegExp("(\\d+$)"));
+            varLen = field.attribute.right(
+                        field.attribute.length() - index).toInt();
+        }
+
+        qDebug() << "varLen = " << varLen;
+
+        vector<uchar> varData;
+
+        if (field.type == "ASCII")
+        {
+            std::copy(data.begin(), data.begin() + varLen, std::back_inserter(varData));
+            varData.push_back(0);
+            log += (char*)&varData[0];
+        }
+        else if (field.type == "BINARY")
+        {
+            varLen = varLen / 8;
+            std::copy(data.begin(), data.begin() + varLen, std::back_inserter(varData));
+            varData.push_back(0);
+            log += Bcd2Hex(&varData[0], varData.size()).c_str();
+        }
+        else if (field.type == "BYTE")
+        {
+            std::copy(data.begin(), data.begin() + varLen, std::back_inserter(varData));
+            varData.push_back(0);
+            log += Bcd2Hex(&varData[0], varData.size()).c_str();
+        }
+        else if (field.type == "BCD")
+        {
+            varLen = (varLen + 1) / 2;
+            std::copy(data.begin(), data.begin() + varLen, std::back_inserter(varData));
+            log += Bcd2Hex(&varData[0], varData.size()).c_str();
+        }
+        else
+        {
+            pOutputTextEdit_->append(QString("field %1 unknow type").arg(nm));
+            break;
+        }
+
+        data.erase(data.begin(), data.begin() + varLen);
+        pOutputTextEdit_->append(log);
     }
+}
+
+void Widget::decodeField(QString sFieldNo, std::vector<uchar> &data)
+{
 }
 
 vector<uchar> Widget::getBitmap(std::vector<uchar> &data)

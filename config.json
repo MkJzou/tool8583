@@ -1,26 +1,340 @@
 [
     {
         "all": [
-            { "no": 11, "name": "受卡方系统跟踪号", "attribute": "n6", "format": "", "type":"BCD" },
-            { "no": 12, "name": "受卡方所在地时间", "attribute": "n6", "format": "", "type":"BCD" },
-            { "no": 13, "name": "受卡方所在地日期", "attribute": "n4", "format": "", "type":"BCD" },
-            { "no": 32, "name": "受理方标识码", "attribute": "", "format": "LLVAR", "type":"BCD" },
-            { "no": 37, "name": "检索参考号", "attribute": "an12", "format": "", "type":"ASCII" },
-            { "no": 39, "name": "应答码", "attribute": "an2", "format": "", "type":"ASCII" },
-            { "no": 41, "name": "受卡机终端标识码", "attribute": "ans8", "format": "", "type":"ASCII" },
-            { "no": 42, "name": "受卡方标识码", "attribute": "ans15", "format": "", "type":"ASCII" },
-            { "no": 60, "name": "自定义域", "attribute": "", "format": "LLLVAR", "type":"BCD",
-                "sub": [
-                    { "no": 60.1, "name": "交易类型码", "attribute": "n2", "format": "", "type":"BCD"},
-                    { "no": 60.2, "name": "批次号", "attribute": "n6", "format": "", "type":"BCD"},
-                    { "no": 60.3, "name": "网络管理信息码", "attribute": "n3", "format": "", "type":"BCD"}
-                ]
+            {
+                "attribute": "",
+                "format": "LLVAR",
+                "name": "主账号",
+                "no": "02",
+                "type": "BCD"
             },
-            { "no": 62, "name": "终端信息/终端密钥", "attribute": "", "format": "LLLVAR", "type":"BINARY" },
-            { "no": 63, "name": "自定义域", "attribute": "", "format": "LLLVAR", "type":"ASCII",
+            {
+                "attribute": "n6",
+                "format": "",
+                "name": "交易处理码",
+                "no": "03",
+                "type": "BCD"
+            },
+            {
+                "attribute": "n12",
+                "format": "",
+                "name": "交易金额",
+                "no": "04",
+                "type": "BCD"
+            },
+            {
+                "attribute": "n6",
+                "format": "",
+                "name": "受卡方系统跟踪号",
+                "no": "11",
+                "type": "BCD"
+            },
+            {
+                "attribute": "n6",
+                "format": "",
+                "name": "受卡方所在地时间",
+                "no": "12",
+                "type": "BCD"
+            },
+            {
+                "attribute": "n4",
+                "format": "",
+                "name": "受卡方所在地日期",
+                "no": "13",
+                "type": "BCD"
+            },
+            {
+                "attribute": "n4",
+                "format": "",
+                "name": "卡有效期",
+                "no": "14",
+                "type": "BCD"
+            },
+            {
+                "attribute": "n4",
+                "format": "",
+                "name": "清算日期",
+                "no": "15",
+                "type": "BCD"
+            },
+            {
+                "attribute": "n3",
+                "format": "",
+                "name": "服务点输入方式码",
+                "no": "22",
+                "type": "BCD"
+            },
+            {
+                "attribute": "n3",
+                "format": "",
+                "name": "卡序列号",
+                "no": "23",
+                "type": "BCD"
+            },
+            {
+                "attribute": "n2",
+                "format": "",
+                "name": "服务点条件码",
+                "no": "25",
+                "type": "BCD"
+            },
+            {
+                "attribute": "n2",
+                "format": "",
+                "name": "服务点PIN获取码",
+                "no": "26",
+                "type": "BCD"
+            },
+            {
+                "attribute": "",
+                "format": "LLVAR",
+                "name": "受理方标识码",
+                "no": "32",
+                "type": "BCD"
+            },
+            {
+                "attribute": "",
+                "format": "LLVAR",
+                "name": "2磁道数据",
+                "no": "35",
+                "type": "BCD"
+            },
+            {
+                "attribute": "",
+                "format": "LLLVAR",
+                "name": "3磁道数据",
+                "no": "36",
+                "type": "BCD"
+            },
+            {
+                "attribute": "an12",
+                "format": "",
+                "name": "检索参考号",
+                "no": "37",
+                "type": "ASCII"
+            },
+            {
+                "attribute": "an6",
+                "format": "",
+                "name": "授权标识应答码",
+                "no": "38",
+                "type": "ASCII"
+            },
+            {
+                "attribute": "an2",
+                "format": "",
+                "name": "应答码",
+                "no": "39",
+                "type": "ASCII"
+            },
+            {
+                "attribute": "ans8",
+                "format": "",
+                "name": "受卡机终端标识码",
+                "no": "41",
+                "type": "ASCII"
+            },
+            {
+                "attribute": "ans15",
+                "format": "",
+                "name": "受卡方标识码",
+                "no": "42",
+                "type": "ASCII"
+            },
+            {
+                "attribute": "",
+                "format": "LLVAR",
+                "name": "附加响应数据",
+                "no": "44",
+                "type": "ASCII"
+            },
+            {
+                "attribute": "",
+                "format": "LLLVAR",
+                "name": "附加数据 - 私有",
+                "no": "48",
+                "type": "BCD"
+            },
+            {
+                "attribute": "an3",
+                "format": "",
+                "name": "交易货币代码",
+                "no": "49",
+                "type": "ASCII"
+            },
+            {
+                "attribute": "b64",
+                "format": "",
+                "name": "个人标识码数据",
+                "no": "52",
+                "type": "BINARY"
+            },
+            {
+                "attribute": "n16",
+                "format": "",
+                "name": "安全控制信息",
+                "no": "53",
+                "type": "BCD"
+            },
+            {
+                "attribute": "",
+                "format": "LLLVAR",
+                "name": "附加金额",
+                "no": "54",
+                "type": "ASCII"
+            },
+            {
+                "attribute": "",
+                "format": "LLLVAR",
+                "name": "IC卡数据域",
+                "no": "55",
+                "type": "BYTE"
+            },
+            {
+                "attribute": "",
+                "format": "LLLVAR",
+                "name": "自定义域",
+                "no": "56",
+                "type": "ASCII"
+            },
+            {
+                "attribute": "",
+                "format": "LLLVAR",
+                "name": "其他终端参数",
+                "no": "57",
+                "type": "ASCII"
+            },
+            {
+                "attribute": "",
+                "format": "LLLVAR",
+                "name": "PBOC电子钱包标准的交易信息",
+                "no": "58",
+                "type": "ASCII"
+            },
+            {
+                "attribute": "",
+                "format": "LLLVAR",
+                "name": "其他终端信息",
+                "no": "59",
+                "type": "ASCII"
+            },
+            {
+                "attribute": "",
+                "format": "LLLVAR",
+                "name": "自定义域",
+                "no": "60",
                 "sub": [
-                    { "no": 63.1, "name": "操作员代码", "attribute": "an3", "format": "", "type":"ASCII"}
-                ]
+                    {
+                        "attribute": "n2",
+                        "format": "",
+                        "name": "交易类型码",
+                        "no": "60.1",
+                        "type": "BCD"
+                    },
+                    {
+                        "attribute": "n6",
+                        "format": "",
+                        "name": "批次号",
+                        "no": "60.2",
+                        "type": "BCD"
+                    },
+                    {
+                        "attribute": "n3",
+                        "format": "",
+                        "name": "网络管理信息码",
+                        "no": "60.3",
+                        "type": "BCD"
+                    },
+                    {
+                        "attribute": "n1",
+                        "format": "",
+                        "name": "终端读取能力",
+                        "no": "60.4",
+                        "type": "BCD"
+                    },
+                    {
+                        "attribute": "n1",
+                        "format": "",
+                        "name": "基于PBOC借/贷记标准的IC卡条件代码",
+                        "no": "60.5",
+                        "type": "BCD"
+                    }
+                ],
+                "type": "BCD"
+            },
+            {
+                "attribute": "",
+                "format": "LLLVAR",
+                "name": "原始信息域",
+                "no": "61",
+                "type": "BCD"
+            },
+            {
+                "attribute": "",
+                "format": "LLLVAR",
+                "name": "终端信息/终端密钥",
+                "no": "62",
+                "type": "BINARY"
+            },
+            {
+                "attribute": "",
+                "format": "LLLVAR",
+                "name": "自定义域",
+                "no": "63",
+                "sub": [
+                    {
+                        "attribute": "an3",
+                        "format": "",
+                        "name": "操作员代码",
+                        "no": "63.1",
+                        "type": "ASCII"
+                    },
+                    {
+                        "attribute": "",
+                        "format": "LLLVAR",
+                        "name": "自定义域2",
+                        "no": "63.2",
+                        "sub": [
+                            {
+                                "attribute": "",
+                                "format": "LLVAR",
+                                "name": "发卡方保留域",
+                                "no": "63.2.1",
+                                "type": "ASCII"
+                            },
+                            {
+                                "attribute": "",
+                                "format": "LLVAR",
+                                "name": "中国银联保留域",
+                                "no": "63.2.2",
+                                "type": "ASCII"
+                            },
+                            {
+                                "attribute": "",
+                                "format": "LLVAR",
+                                "name": "受理机构保留域",
+                                "no": "63.2.3",
+                                "type": "ASCII"
+                            },
+                            {
+                                "attribute": "",
+                                "format": "LLVAR",
+                                "name": "POS终端保留域",
+                                "no": "63.2.4",
+                                "type": "ASCII"
+                            }
+                        ],
+                        "type": "ASCII"
+                    }
+                ],
+                "type": "ASCII"
+            },
+            {
+                "attribute": "b64",
+                "format": "",
+                "name": "报文鉴别码",
+                "no": "64",
+                "type": "BINARY"
             }
         ]
     }
